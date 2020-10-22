@@ -95,6 +95,28 @@ services:
   ################################################################
   #                     Media Server                             #
   ################################################################
+  radarr:
+    image: linuxserver/radarr:preview
+    container_name: radarr
+    hostname: radarr
+    ports:
+      - '7878:7878'
+    restart: always
+    environment:
+      - 'PUID=${PUID}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+      - 'UMASK_SET=022'
+    volumes:
+      - '${USERDIR}/volumes/radarr/config:/config:z'
+      - '${USERDIR}/Downloads/completed:/downloads'
+      - '${USERDIR}/media/movies:/movies'
+      - '/etc/localtime:/etc/localtime:ro'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.radarr.rule=PathPrefix(`/radarr`)'
+      - 'traefik.http.services.radarr.loadbalancer.server.port=7878'
+
   qbittorrent:
     image: 'linuxserver/qbittorrent'
     container_name: qbit

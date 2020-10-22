@@ -82,7 +82,7 @@ services:
     container_name: radarr
     hostname: radarr
     ports:
-      - '7878'
+      - '7878:7878'
     restart: always
     environment:
       - 'PUID=${PUID}'

@@ -15,14 +15,38 @@ services:
       - '--providers.docker.exposedByDefault=false'
       - '--api.insecure=true'
       - '--api.dashboard=true'
+      - '--accesslog=true'
     ports:
       - '80:80'
       - '8080:8080'
     labels:
       - 'traefik.http.routers.traefik.rule=Host(`${ROOT_URL}`)'
     volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'    
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
+  ################################################################
+  #                     Monitoring                               #
+  ################################################################     
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    hostname: prometheus
+    restart: always
+    environment: 
+      - 'TZ=${TZ}'
+      - 'PUID=${PUID}'
+      - 'PGID=${PGID}'
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--web.external-url=${ROOT_URL}/prometheus'
+    volumes:
+      - '${USERDIR}/volumes/prometheus:/etc/prometheus:z'
+      - '${USERDIR}/volumes/prometheus/data:/prometheus:z'
+      - './config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro'
+    labels: 
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.prometheus.rule=Host(`${ROOT_URL}`) && PathPrefix(`/prometheus`)'
+      - 'traefik.http.services.prometheus.loadbalancer.server.port=9090'
   ################################################################
   #                     Media Server                             #
   ################################################################

@@ -80,6 +80,27 @@ services:
       - 'traefik.http.routers.qbittorrent.middlewares=qb-strip,qb-redirect,qb-headers'
       - 'traefik.http.services.qbittorrent.loadbalancer.passhostheader=false'
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    hostname: grafana
+    restart: always
+    environment:
+      - 'PUID=${PUID}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+      - 'GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana'
+      - 'GF_SERVER_SERVE_FROM_SUB_PATH=true'
+    expose:
+      - '3000'
+    volumes:
+      - '${USERDIR}/volumes/grafana/data:/var/lib/grafana:z'
+      - './grafana/plugins:/var/lib/grafana/plugins:rw'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.prometheus.rule=Host(`${ROOT_URL}`) && PathPrefix(`/grafana`)'
+      - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
+
   ################################################################
   #                       Storage                                #
   ################################################################

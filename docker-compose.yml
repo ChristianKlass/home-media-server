@@ -79,3 +79,19 @@ services:
       - 'traefik.http.middlewares.qb-headers.headers.customrequestheaders.Origin='
       - 'traefik.http.routers.qbittorrent.middlewares=qb-strip,qb-redirect,qb-headers'
       - 'traefik.http.services.qbittorrent.loadbalancer.passhostheader=false'
+
+  ################################################################
+  #                       Storage                                #
+  ################################################################
+  victoria-metrics:
+    image: victoriametrics/victoria-metrics:latest
+    container_name: victoria-metrics
+    restart: always
+    environment:
+      - 'PUID=${PUID}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+    expose:
+      - '8428'
+    volumes:
+      - '${USERDIR}/volumes/victoria-metrics/data:/victoria-metrics-data:z'

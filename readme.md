@@ -46,3 +46,11 @@ scrape_configs:
 # https://prometheus.io/docs/prometheus/latest/configuration/configuration/
 ```
 Note: we're able to use the names of the services because we're using Docker. So instead of having to type something like `url: "http://192.168.56.101:8428/api/v1/write"` we can just use `http://victoria-metrics:8428/api/v1/write`. I think Docker has some sort of DNS or something that it uses internally.
+
+## Storage
+### Victoria Metrics
+We need a place to store the long term metrics that are collected by Prometheus, which only keeps 2 weeks or so (I think) of metrics.
+
+Apparently, Victoria Metrics is a drop in replacement for Prometheus' storage, which means that we can direct Prometheus to write to a Victoria Metrics instance, then in Grafana, just add the Victoria Metrics instance as a Prometheus datasource.
+
+Read more about it here: https://victoriametrics.github.io/

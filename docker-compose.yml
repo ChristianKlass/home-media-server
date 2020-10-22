@@ -39,7 +39,7 @@ services:
     expose:
       - '8080'
     volumes:
-      - '${USERDIR}/config/qbittorrent:/config:z'
+      - '${USERDIR}/volumes/qbittorrent/config:/config:z'
       - '${USERDIR}/Downloads/completed:/downloads'
     labels:
       - 'traefik.enable=true'

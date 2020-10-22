@@ -62,6 +62,12 @@ environment:
   - 'GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana'
   - 'GF_SERVER_SERVE_FROM_SUB_PATH=true'
 ```
+
+If you need to install plugins for Grafana, you can place the folder in the following location:
+```
+volumes:
+  - './config/grafana/plugins:/var/lib/grafana/plugins:rw'
+```
 > TODO: Eventually, I want to set up a MYSQL database so that Grafana can use it. But not so soon, I guess :P
 
 

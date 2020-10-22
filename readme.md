@@ -72,6 +72,13 @@ volumes:
 
 
 ## Media server
+### Jackett
+**From their Github:** Jackett works as a proxy server: it translates queries from apps (Sonarr, Radarr, SickRage, CouchPotato, Mylar, Lidarr, DuckieTV, qBittorrent, Nefarious etc.) into tracker-site-specific http queries, parses the html response, then sends results back to the requesting software.
+
+It's a single point of indexing and translates it to a format that Sonarr and Radarr can understand (I think).
+
+Read more about it on their [Github](https://github.com/Jackett/Jackett).
+
 ### Sonarr
 **From their website:** Radarr is a movie collection manager for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new movies and will interface with clients and indexers to grab, sort, and rename them. It can also be configured to automatically upgrade the quality of existing files in the library when a better quality format becomes available.
 
@@ -82,10 +89,10 @@ volumes:
   - '${USERDIR}/media/tv-shows:/tv-shows'
 ```
 
-Read more about it their [Github](https://hub.docker.com/r/linuxserver/radarr) and on their [official website](https://radarr.video/).
+Read more about it on their [Github](https://hub.docker.com/r/linuxserver/radarr) and on their [official website](https://radarr.video/).
 
 ### Radarr
-**From their own Github page:** Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
+**From their Github:** Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
 
 Remember to add your media and download folders:
 ```
@@ -94,7 +101,7 @@ volumes:
   - '${USERDIR}/media/movies:/movies'
 ```
 
-Read more about it their [Github](https://github.com/Sonarr/Sonarr) and on their [official website](https://sonarr.tv/).
+Read more about it on their [Github](https://github.com/Sonarr/Sonarr) and on their [official website](https://sonarr.tv/).
 
 ## Storage
 ### Victoria Metrics

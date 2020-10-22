@@ -123,8 +123,10 @@ services:
     image: linuxserver/sonarr:preview
     container_name: sonarr
     hostname: sonarr
-    ports:
-      - '8989:8989'
+    expose:
+      - '8989'
+    # ports:
+    #   - '8989:8989'
     restart: always
     environment:
       - 'PUID=${PUID}'

@@ -78,7 +78,8 @@ services:
     user: root
     privileged: true
     restart: always
-    expose: '9100'
+    expose:
+      - '9100'
     volumes:
       - '/proc:/host/proc:ro'
       - '/sys:/host/sys:ro'

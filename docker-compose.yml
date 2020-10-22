@@ -23,6 +23,9 @@ services:
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'    
 
+  ################################################################
+  #                     Media Server                             #
+  ################################################################
   qbittorrent:
     image: 'linuxserver/qbittorrent'
     container_name: qbit
@@ -36,8 +39,8 @@ services:
     expose:
       - '8080'
     volumes:
-      - './${USERDIR}/config/qbittorrent-config:/config:z'
-      - './${USERDIR}/Downloads/completed:/downloads'
+      - '${USERDIR}/config/qbittorrent:/config:z'
+      - '${USERDIR}/Downloads/completed:/downloads'
     labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.qbittorrent.rule=Host(`${ROOT_URL}`) && PathPrefix(`/qb`)'

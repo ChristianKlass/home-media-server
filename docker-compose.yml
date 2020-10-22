@@ -70,6 +70,23 @@ services:
       - 'traefik.enable=true'
       - 'traefik.http.routers.grafana.rule=Host(`${ROOT_URL}`) && PathPrefix(`/grafana`)'
       - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
+
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    hostname: node-exporter
+    user: root
+    privileged: true
+    restart: always
+    expose: '9100'
+    volumes:
+      - '/proc:/host/proc:ro'
+      - '/sys:/host/sys:ro'
+      - '/:/rootfs:ro'
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
   ################################################################
   #                     Media Server                             #
   ################################################################

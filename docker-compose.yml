@@ -1,6 +1,9 @@
 version: '3.6'
 
 services:
+  ################################################################
+  #                        Services                              #
+  ################################################################
   traefik:
     image: 'traefik:v2.2'
     container_name: traefik
@@ -19,3 +22,34 @@ services:
       - 'traefik.http.routers.traefik.rule=Host(`${ROOT_URL}`)'
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'    
+
+  ################################################################
+  #                     Media Server                             #
+  ################################################################
+  qbittorrent:
+    image: 'linuxserver/qbittorrent'
+    container_name: qbit
+    restart: always
+    environment:
+      - 'PUID=${PUID}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+      - UMASK_SET=022
+      - WEBUI_PORT=8080
+    expose:
+      - '8080'
+    volumes:
+      - '${USERDIR}/config/qbittorrent:/config:z'
+      - '${USERDIR}/Downloads/completed:/downloads'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.qbittorrent.rule=Host(`${ROOT_URL}`) && PathPrefix(`/qb`)'
+      - 'traefik.http.services.qbittorrent.loadbalancer.server.port=8080'
+      - 'traefik.http.middlewares.qb-redirect.redirectregex.regex=^(.*)/qb$$'
+      - 'traefik.http.middlewares.qb-redirect.redirectregex.replacement=$$1/qb/'
+      - 'traefik.http.middlewares.qb-strip.stripprefix.prefixes=/qb/'
+      - 'traefik.http.middlewares.qb-headers.headers.customrequestheaders.X-Frame-Options=SAMEORIGIN'
+      - 'traefik.http.middlewares.qb-headers.headers.customrequestheaders.Referer='
+      - 'traefik.http.middlewares.qb-headers.headers.customrequestheaders.Origin='
+      - 'traefik.http.routers.qbittorrent.middlewares=qb-strip,qb-redirect,qb-headers'
+      - 'traefik.http.services.qbittorrent.loadbalancer.passhostheader=false'

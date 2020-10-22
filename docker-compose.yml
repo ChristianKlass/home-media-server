@@ -45,8 +45,8 @@ services:
       - '--web.external-url=http://${ROOT_URL}/prometheus'
     expose:
       - '9090'
-    ports:
-      - '9091:9090'
+    # ports:
+    #   - '9091:9090'
     volumes:
       - './config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro'
     labels:
@@ -104,8 +104,8 @@ services:
       - 'PUID=${PUID}'
       - 'PGID=${PGID}'
       - 'TZ=${TZ}'
-    ports:
-      - '9117:9117'
+    # ports:
+    #   - '9117:9117'
     expose:
       - '9117'
     volumes:

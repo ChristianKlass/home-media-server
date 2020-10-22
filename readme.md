@@ -72,6 +72,57 @@ volumes:
 
 
 ## Media server
+**Note:** For most of these apps, you'll need to first expose their port using the `docker-compose.yml` so that you can access the web UI. You can do this with the `ports` key:
+```
+sonarr:
+  image: linuxserver/sonarr:preview
+  container_name: sonarr
+  hostname: sonarr
+  expose:
+    - '8989'
+  ports:
+    - '8989:8989'
+  ...
+```
+The `expose` and `ports` keys are different.
+
+I don't think the `expose` does anything, it's more like a reminder that these ports are exposed **within** the docker network. This means that you can do access Sonarr within the network with http://sonarr:8989.
+
+To try this, you can go into a container which can `ping`. I like to use the Grafana container, because :shrug:
+```
+docker exec -it grafana bash
+
+# you'll get a response similar to this:
+bash-5.0$ ping sonarr
+PING sonarr (172.28.0.9): 56 data bytes
+ping: permission denied (are you root?)
+```
+The ping won't actually work, but you can see that they'll resolve the `sonarr` name to the an IP address.
+
+The `ports` key maps the internal container port to the host's port so that you can access it. How this works is like this:
+```
+ports:
+  - '8989:8989' #this maps the container's port 8989 to the host's port 8989.
+```
+This example is not particularly helpful, but it's what was done. :3 So to access the container, you can do `http://<host.ip.address>:8989`.
+
+For a more helpful example, let's pretend we want to map host port `1234` to Sonarr's `8989` port, so that we can access Sonarr with `http://<host.ip.address>:1234`:
+```
+ports:
+  - '1234:8989' #it's always <host-port>:<container-port>
+```
+
+After you expose them, you need to fumble around in their settings page to find something like `Base URL`. Change the base URL to the address you provided in the `PathPrefix` label for Traefik:
+```
+sonarr:
+  image: linuxserver/sonarr:preview
+  ...
+  labels:
+    - 'traefik.enable=true'
+    - 'traefik.http.routers.sonarr.rule=Host(`${ROOT_URL}`) && PathPrefix(`/sonarr`)'
+    - 'traefik.http.services.sonarr.loadbalancer.server.port=8989'
+```
+
 ### Jellyfin
 Jellyfin is the thing that lets you watch your media. It will collect, play, and stream the media. Currently, I will only use it for (legally obtained) movies and TV shows, but I think it can do audiobooks, pictures, and some other stuff, although I haven't tested it yet.
 

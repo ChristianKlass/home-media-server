@@ -72,6 +72,18 @@ volumes:
 
 
 ## Media server
+### Sonarr
+**From their website:** Radarr is a movie collection manager for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new movies and will interface with clients and indexers to grab, sort, and rename them. It can also be configured to automatically upgrade the quality of existing files in the library when a better quality format becomes available.
+
+Remember to add your media and download folders:
+```
+volumes:
+  - '${USERDIR}/Downloads/completed:/downloads'
+  - '${USERDIR}/media/tv-shows:/tv-shows'
+```
+
+Read more about it their [Github](https://hub.docker.com/r/linuxserver/radarr) and on their [official website](https://radarr.video/).
+
 ### Radarr
 **From their own Github page:** Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
 

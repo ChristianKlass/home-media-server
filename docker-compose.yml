@@ -95,6 +95,22 @@ services:
   ################################################################
   #                     Media Server                             #
   ################################################################
+  muximux:
+    image: linuxserver/muximux
+    container_name: muximux
+    environment:
+      - 'PUID=${PUID}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+    expose:
+      - '80'
+    volumes:
+      - '${USERDIR}/volumes/muximux/config:/config:z'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.muximux.rule=Host(`${ROOT_URL}`) && PathPrefix(`/`)'
+      - 'traefik.http.services.muximux.loadbalancer.server.port=80'
+
   jackett:
     image: linuxserver/jackett:development
     container_name: jackett

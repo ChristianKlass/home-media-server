@@ -71,10 +71,23 @@ volumes:
 > TODO: Eventually, I want to set up a MYSQL database so that Grafana can use it. But not so soon, I guess :P
 
 
+## Media server
+### Radarr
+**From their own Github page:** Sonarr is a PVR for Usenet and BitTorrent users. It can monitor multiple RSS feeds for new episodes of your favorite shows and will grab, sort and rename them. It can also be configured to automatically upgrade the quality of files already downloaded when a better quality format becomes available.
+
+Remember to add your media and download folders:
+```
+volumes:
+  - '${USERDIR}/Downloads/completed:/downloads'
+  - '${USERDIR}/media/movies:/movies'
+```
+
+Read more about it their [Github](https://github.com/Sonarr/Sonarr) and on their [official website](https://sonarr.tv/).
+
 ## Storage
 ### Victoria Metrics
 We need a place to store the long term metrics that are collected by Prometheus, which only keeps 2 weeks or so (I think) of metrics.
 
 Apparently, Victoria Metrics is a drop in replacement for Prometheus' storage, which means that we can direct Prometheus to write to a Victoria Metrics instance, then in Grafana, just add the Victoria Metrics instance as a Prometheus datasource.
 
-Read more about it here: https://victoriametrics.github.io/
+Read more about it on their [Github](https://victoriametrics.github.io/) and their [official website](https://victoriametrics.com/).

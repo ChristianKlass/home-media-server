@@ -81,7 +81,7 @@ services:
       - 'traefik.http.services.qbittorrent.loadbalancer.passhostheader=false'
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana:grafana:latest
     container_name: grafana
     hostname: grafana
     restart: always

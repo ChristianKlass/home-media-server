@@ -91,8 +91,8 @@ services:
       - 'UMASK_SET=022'
     volumes:
       - '${USERDIR}/volumes/radarr/config:/config:z'
-      - '${USERDIR}/Downloads/completed:downloads'
-      - '${USERDIR}/media/movies:movies'
+      - '${USERDIR}/Downloads/completed:/downloads'
+      - '${USERDIR}/media/movies:/movies'
       - '/etc/localtime:/etc/localtime:ro'
     labels:
       - 'traefik.enable=true'

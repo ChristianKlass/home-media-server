@@ -119,7 +119,7 @@ services:
       - 'traefik.http.routers.radarr.rule=PathPrefix(`/radarr`)'
       - 'traefik.http.services.radarr.loadbalancer.server.port=7878'
 
-  radarr:
+  sonarr:
     image: linuxserver/sonarr:preview
     container_name: sonarr
     hostname: sonarr

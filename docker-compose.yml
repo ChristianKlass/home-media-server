@@ -81,7 +81,8 @@ services:
     image: linuxserver/radarr:preview
     container_name: radarr
     hostname: radarr
-    ports: '7878'
+    ports:
+      - '7878'
     restart: always
     environment:
       - 'PUID=${PUID}'

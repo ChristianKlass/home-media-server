@@ -5,7 +5,7 @@ services:
   #                        Services                              #
   ################################################################
   traefik:
-    image: 'traefik:v2.2'
+    image: 'traefik:latest'
     container_name: traefik
     environment:
       - TZ=${TZ}

@@ -112,6 +112,28 @@ services:
       - 'traefik.http.routers.muximux.rule=Host(`${ROOT_URL}`) && PathPrefix(`/`)'
       - 'traefik.http.services.muximux.loadbalancer.server.port=80'
 
+  jellyfin:
+    image: linuxserver/jellyfin
+    container_name: jellyfin
+    environment:
+      - 'PUID=${PUID}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
+      - 'UMASK_SET=022'
+    expose:
+      - '8096'
+    ports:
+      - '7359:7359/udp' #for clients to discover
+      - '1900:1900/udp' #DLNA clients
+    volumes:
+      - '${USERDIR}/volumes/jellyfin/config:/config:z'
+      - '${USERDIR}/media/tv-shows:/data/tv-shows'
+      - '${USERDIR}/media/movies:/data/movies'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.jellyfin.rule=Host(`${ROOT_URL}`) && PathPrefix(`/jellyfin`)'
+      - 'traefik.http.services.jellyfin.loadbalancer.server.port=8096'
+
   jackett:
     image: linuxserver/jackett:development
     container_name: jackett

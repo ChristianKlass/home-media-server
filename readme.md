@@ -72,6 +72,13 @@ volumes:
 
 
 ## Media server
+### Jellyfin
+Jellyfin is the thing that lets you watch your media. It will collect, play, and stream the media. Currently, I will only use it for (legally obtained) movies and TV shows, but I think it can do audiobooks, pictures, and some other stuff, although I haven't tested it yet.
+
+There are also Android and iOS apps that you can download and connect to this server so you can watch/listen/whatever on your mobile devices.
+
+Read more on their [website](https://jellyfin.org/) and their [Github](https://github.com/jellyfin/jellyfin)
+
 ### Muximux
 This is basically the frontend for the whole HMS. However, you need to make sure your Traefik is working properly, because when it asks for the links to the pages to display, it won't work with the Docker internal names. I think it's because it actually loads an iFrame or something like that. Whatever the case, if someone finds a way to make it work, let me know. :D
 

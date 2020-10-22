@@ -26,24 +26,26 @@ services:
 
   ################################################################
   #                     Monitoring                               #
-  ################################################################     
+  ################################################################
   prometheus:
     image: prom/prometheus
     container_name: prometheus
     hostname: prometheus
     restart: always
-    environment: 
+    environment:
       - 'TZ=${TZ}'
       - 'PUID=${PUID}'
       - 'PGID=${PGID}'
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.external-url=${ROOT_URL}/prometheus'
+      - '--web.external-url=http://${ROOT_URL}/prometheus'
+    expose:
+      - '9090'
+    ports:
+      - '9091:9090'
     volumes:
-      - '${USERDIR}/volumes/prometheus:/etc/prometheus:z'
-      - '${USERDIR}/volumes/prometheus/data:/prometheus:z'
       - './config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro'
-    labels: 
+    labels:
       - 'traefik.enable=true'
       - 'traefik.http.routers.prometheus.rule=Host(`${ROOT_URL}`) && PathPrefix(`/prometheus`)'
       - 'traefik.http.services.prometheus.loadbalancer.server.port=9090'

@@ -72,6 +72,13 @@ volumes:
 
 
 ## Media server
+### Muximux
+This is basically the frontend for the whole HMS. However, you need to make sure your Traefik is working properly, because when it asks for the links to the pages to display, it won't work with the Docker internal names. I think it's because it actually loads an iFrame or something like that. Whatever the case, if someone finds a way to make it work, let me know. :D
+
+Otherwise, it's actually a really good piece of software, it's fast and looks good.
+
+Read more about it on their [Github](https://github.com/mescon/Muximux)
+
 ### Jackett
 **From their Github:** Jackett works as a proxy server: it translates queries from apps (Sonarr, Radarr, SickRage, CouchPotato, Mylar, Lidarr, DuckieTV, qBittorrent, Nefarious etc.) into tracker-site-specific http queries, parses the html response, then sends results back to the requesting software.
 

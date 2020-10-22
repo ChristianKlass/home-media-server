@@ -3,6 +3,25 @@ This is a home media server project for me to learn how Docker and Docker-Compos
 
 I intend to make it able to automatically download Movies and TV series using softwares such as Sonarr and Radarr. Of course, I'm not actually going to use it, because we all know downloading movies is illegal. But I think it's still an interesting project and I hope I learn a lot from it.
 
+**Note:** I know that I don't use the Docker volumes in this build, and you totally can if you want. I just want it to be easy to move my stuff around if/when I need to. In my experience, Docker volumes are clunky to move around. I can't just copy a volume from one computer to another easily. If this is possible, please let me know, it would be nice.
+
+## Before You Start
+You need to add the following to your environment variables. I don't know the best way to do it, but I use the `/etc/environment` file. If the file doesn't exist, create it:
+```
+TZ=Asia/Singapore # Change this to your timezone in this format
+ROOT_URL=some.address # The address you'd like to access your server from.
+
+PUID=1000
+PGID=1001
+USERDIR=/path/to/keep/stuff # I use this to store the media/download/config stuff
+```
+
+To get the PUID and PGID, you can run `id` in your terminal and it will give you some output like:
+```
+uid=1000(mark) gid=1000(mark) groups=1000(mark),10(wheel),1001(docker)
+```
+The important ones you're looking for are `uid` (PUID) and the `gid` for docker (PGID).
+
 ## Traefik
 I'm going to be using Traefik as my "Ingress Controller". Everyone comes in through Traefik, and cannot access the various containers directly. I may decide to add some authentication in future (require authentication to access everything), maybe using Keycloak and OAuth.
 
@@ -86,7 +105,9 @@ sonarr:
 ```
 The `expose` and `ports` keys are different.
 
-I don't think the `expose` does anything, it's more like a reminder that these ports are exposed **within** the docker network. This means that you can do access Sonarr within the network with http://sonarr:8989.
+I don't think the `expose` does anything, it's more like a reminder that these ports are exposed **within** the docker network. This means that you can do access Sonarr within the network with http://sonarr:8989. It seems to work without it as well. I just use it as a way to document which ports are open for a particular app.
+
+Anyway, the info about this can be found in the [Docker-Compose documentation](https://docs.docker.com/compose/compose-file/#expose).
 
 To try this, you can go into a container which can `ping`. I like to use the Grafana container, because :shrug:
 ```
@@ -99,10 +120,12 @@ ping: permission denied (are you root?)
 ```
 The ping won't actually work, but you can see that they'll resolve the `sonarr` name to the an IP address.
 
-The `ports` key maps the internal container port to the host's port so that you can access it. How this works is like this:
+The `ports` key maps the internal container port to the host's port so that you can access it. This can also be found in the [Docker-Compose documentation](https://docs.docker.com/compose/compose-file/#ports) as well.
+
+Ports are mapped in a `host-port:container-port` configuration. It works like this:
 ```
 ports:
-  - '8989:8989' #this maps the container's port 8989 to the host's port 8989.
+  - '8989:8989' #this maps the host's port 8989 to the container's port 8989.
 ```
 This example is not particularly helpful, but it's what was done. :3 So to access the container, you can do `http://<host.ip.address>:8989`.
 
@@ -112,7 +135,7 @@ ports:
   - '1234:8989' #it's always <host-port>:<container-port>
 ```
 
-After you expose them, you need to fumble around in their settings page to find something like `Base URL`. Change the base URL to the address you provided in the `PathPrefix` label for Traefik:
+After you expose them, you need to fumble around in their settings page to find something like `Base URL`. Change the base URL to the address you provided in the `PathPrefix` label for Traefik. It's the second label:
 ```
 sonarr:
   image: linuxserver/sonarr:preview
@@ -122,6 +145,8 @@ sonarr:
     - 'traefik.http.routers.sonarr.rule=Host(`${ROOT_URL}`) && PathPrefix(`/sonarr`)'
     - 'traefik.http.services.sonarr.loadbalancer.server.port=8989'
 ```
+
+After you do this, you can remove the `ports` key in the `docker-compose.yml` file, and you can access them with `http://<root-url>/sonarr`.
 
 ### Jellyfin
 Jellyfin is the thing that lets you watch your media. It will collect, play, and stream the media. Currently, I will only use it for (legally obtained) movies and TV shows, but I think it can do audiobooks, pictures, and some other stuff, although I haven't tested it yet.

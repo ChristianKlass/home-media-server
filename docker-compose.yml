@@ -95,10 +95,10 @@ services:
       - '3000'
     volumes:
       - '${USERDIR}/volumes/grafana/data:/var/lib/grafana:z'
-      - './grafana/plugins:/var/lib/grafana/plugins:rw'
+      - './config/grafana/plugins:/var/lib/grafana/plugins:rw'
     labels:
       - 'traefik.enable=true'
-      - 'traefik.http.routers.prometheus.rule=Host(`${ROOT_URL}`) && PathPrefix(`/grafana`)'
+      - 'traefik.http.routers.grafana.rule=Host(`${ROOT_URL}`) && PathPrefix(`/grafana`)'
       - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
 
   ################################################################

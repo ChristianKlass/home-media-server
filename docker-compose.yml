@@ -76,6 +76,18 @@ services:
       - 'traefik.http.routers.grafana.rule=Host(`${ROOT_URL}`) && PathPrefix(`/grafana`)'
       - 'traefik.http.services.grafana.loadbalancer.server.port=3000'
 
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    hostname: loki
+    restart: always
+    command:
+      - '--config.file=/etc/loki/local-config.yml'
+    expose:
+      - '3100'
+    volumes:
+      - './config/loki:/etc/loki:ro'
+
   node-exporter:
     image: prom/node-exporter
     container_name: node-exporter

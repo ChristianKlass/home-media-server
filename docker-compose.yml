@@ -82,11 +82,11 @@ services:
     hostname: loki
     restart: always
     command:
-      - '--config.file=/etc/loki/local-config.yaml'
+      - '--config.file=/etc/loki/local-config.yml'
     expose:
       - '3100'
     volumes:
-      - './config/loki/loki.yml:/etc/loki/local-config.yaml'
+      - './config/loki:/etc/loki:ro'
 
   node-exporter:
     image: prom/node-exporter

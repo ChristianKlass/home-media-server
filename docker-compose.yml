@@ -83,6 +83,10 @@ services:
     restart: always
     command:
       - '--config.file=/etc/loki/local-config.yml'
+    environment:
+      - 'PUID=${PUID}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'
     expose:
       - '3100'
     volumes:
@@ -105,6 +109,19 @@ services:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+
+    vector:
+      image: timberio/vector:latest-alpine
+      container_name: vector
+      restart: always
+      environment:
+        - 'PUID=${PUID}'
+        - 'PGID=${PGID}'
+        - 'TZ=${TZ}'
+      volumes:
+        - './config/vector:/etc/vector:ro'
+        - '/var/run/docker.sock:/var/run/docker.sock' # so that it can collect logs of the containers.
+
   ################################################################
   #                     Media Server                             #
   ################################################################

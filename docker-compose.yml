@@ -229,8 +229,6 @@ services:
     hostname: sonarr
     expose:
       - '8989'
-    # ports:
-    #   - '8989:8989'
     restart: always
     environment:
       - 'PUID=${PUID}'
@@ -248,7 +246,7 @@ services:
       - 'traefik.http.services.sonarr.loadbalancer.server.port=8989'
 
   qbittorrent:
-    image: 'linuxserver/qbittorrent'
+    image: 'linuxserver/qbittorrent:version-14.2.5.99202004250119-7015-2c65b79ubuntu18.04.1'
     container_name: qbit
     restart: always
     environment:

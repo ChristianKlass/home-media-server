@@ -36,8 +36,8 @@ services:
       - 'TZ=${TZ}'
       - 'PUID=${PUID}'
       - 'PGID=${PGID}'
+      - 'WATCHTOWER_SCHEDULE=0 0 4 * * *'
     command:
-      - '--schedule "0 0 4 * * *'
       - '--rolling-restart=true'
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'

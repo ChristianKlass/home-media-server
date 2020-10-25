@@ -200,7 +200,7 @@ services:
       - 'traefik.http.services.jackett.loadbalancer.server.port=9117'
 
   radarr:
-    image: linuxserver/radarr:preview
+    image: linuxserver/radarr:nightly
     container_name: radarr
     hostname: radarr
     # ports:
@@ -230,6 +230,8 @@ services:
     expose:
       - '8989'
     restart: always
+    ports:
+      - '8989:8989'
     environment:
       - 'PUID=${PUID}'
       - 'PGID=${PGID}'

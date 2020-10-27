@@ -188,8 +188,6 @@ services:
       - 'PUID=${PUID}'
       - 'PGID=${PGID}'
       - 'TZ=${TZ}'
-    # ports:
-    #   - '9117:9117'
     expose:
       - '9117'
     volumes:
@@ -203,8 +201,6 @@ services:
     image: linuxserver/radarr:nightly
     container_name: radarr
     hostname: radarr
-    # ports:
-    #   - '7878:7878'
     expose:
       - '7878'
     restart: always
@@ -230,8 +226,6 @@ services:
     expose:
       - '8989'
     restart: always
-    ports:
-      - '8989:8989'
     environment:
       - 'PUID=${PUID}'
       - 'PGID=${PGID}'
@@ -255,8 +249,8 @@ services:
       - 'PUID=${PUID}'
       - 'PGID=${PGID}'
       - 'TZ=${TZ}'
-      - UMASK_SET=022
-      - WEBUI_PORT=8080
+      - 'UMASK_SET=022'
+      - 'WEBUI_PORT=8080'
     expose:
       - '8080'
     volumes:

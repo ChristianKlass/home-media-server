@@ -7,8 +7,8 @@ services:
   traefik:
     image: 'traefik:latest'
     container_name: traefik
-    environment:
-      - TZ=${TZ}
+    env_file: 
+      - './env/common.env'
     command:
       - '--entryPoints.http.address=:80'
       - '--providers.docker=true'
@@ -32,10 +32,9 @@ services:
     image: containrrr/watchtower
     container_name: watchtower
     restart: always
+    env_file: 
+      - './env/common.env'
     environment:
-      - 'TZ=${TZ}'
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
       - 'WATCHTOWER_SCHEDULE=0 0 4 * * *'
     command:
       - '--rolling-restart=true'
@@ -50,10 +49,8 @@ services:
     container_name: prometheus
     hostname: prometheus
     restart: always
-    environment:
-      - 'TZ=${TZ}'
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
+    env_file: 
+      - './env/common.env'
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--web.external-url=http://${ROOT_URL}/prometheus'
@@ -73,10 +70,9 @@ services:
     container_name: grafana
     hostname: grafana
     restart: always
+    env_file: 
+      - './env/common.env'
     environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
       - 'GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana'
       - 'GF_SERVER_SERVE_FROM_SUB_PATH=true'
       - 'GF_SECURITY_ALLOW_EMBEDDING=true'
@@ -97,10 +93,8 @@ services:
     restart: always
     command:
       - '--config.file=/etc/loki/local-config.yml'
-    environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
+    env_file: 
+      - './env/common.env'
     expose:
       - '3100'
     volumes:
@@ -110,6 +104,8 @@ services:
     image: prom/node-exporter
     container_name: node-exporter
     hostname: node-exporter
+    env_file: 
+      - './env/common.env'
     user: root
     privileged: true
     restart: always
@@ -128,10 +124,8 @@ services:
     image: timberio/vector:latest-alpine
     container_name: vector
     restart: always
-    environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
+    env_file: 
+      - './env/common.env'
     volumes:
       - './config/vector:/etc/vector:ro'
       - '/var/run/docker.sock:/var/run/docker.sock' # so that it can collect logs of the containers.
@@ -142,10 +136,8 @@ services:
   muximux:
     image: linuxserver/muximux
     container_name: muximux
-    environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
+    env_file: 
+      - './env/common.env'
     expose:
       - '80'
     volumes:
@@ -158,11 +150,8 @@ services:
   jellyfin:
     image: linuxserver/jellyfin
     container_name: jellyfin
-    environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
-      - 'UMASK_SET=022'
+    env_file: 
+      - './env/common.env'
     expose:
       - '8096'
     ports:
@@ -184,10 +173,8 @@ services:
     container_name: jackett
     hostname: jackett
     restart: always
-    environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
+    env_file: 
+      - './env/common.env'
     expose:
       - '9117'
     volumes:
@@ -204,11 +191,8 @@ services:
     expose:
       - '7878'
     restart: always
-    environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
-      - 'UMASK_SET=022'
+    env_file: 
+      - './env/common.env'
     volumes:
       - '${USERDIR}/volumes/radarr/config:/config:z'
       - '${USERDIR}/Downloads/completed:/downloads'
@@ -226,11 +210,8 @@ services:
     expose:
       - '8989'
     restart: always
-    environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
-      - 'UMASK_SET=022'
+    env_file: 
+      - './env/common.env'
     volumes:
       - '${USERDIR}/volumes/sonarr/config:/config:z'
       - '${USERDIR}/Downloads/completed:/downloads'
@@ -245,11 +226,9 @@ services:
     image: 'linuxserver/qbittorrent:version-14.2.5.99202004250119-7015-2c65b79ubuntu18.04.1'
     container_name: qbit
     restart: always
+    env_file: 
+      - './env/common.env'
     environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
-      - 'UMASK_SET=022'
       - 'WEBUI_PORT=8080'
     expose:
       - '8080'
@@ -276,10 +255,8 @@ services:
     image: victoriametrics/victoria-metrics:latest
     container_name: victoria-metrics
     restart: always
-    environment:
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'
+    env_file: 
+      - './env/common.env'
     expose:
       - '8428'
     volumes:

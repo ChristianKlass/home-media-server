@@ -153,6 +153,17 @@ Jellyfin is the thing that lets you watch your media. It will collect, play, and
 
 There are also Android and iOS apps that you can download and connect to this server so you can watch/listen/whatever on your mobile devices.
 
+**Note:** For some reason the Android Jellyfin app doesn't work with the `http://${ROOT_URL}/jellyfin` so for now I've just exposed the port so I can access with `http://<ip-address>:8096`.
+
+Maybe one day I'll figure out how to get this to work reliably. It works now, but it doesn't connect consistently. Maybe it's my DNS setting and has absolutely nothing to do with this config. Nevertheless, doing this helps it connect stably, so.. Anyway, to do this, just add the `ports:` config:
+```
+jellyfin:
+  ...
+  ports:
+    - '8096:8096'
+  ...
+```
+
 Read more on their [website](https://jellyfin.org/) and their [Github](https://github.com/jellyfin/jellyfin)
 
 ### Muximux

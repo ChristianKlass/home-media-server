@@ -265,8 +265,5 @@ services:
     container_name: grafana-postgres
     restart: always
     env_file: 
+      - './env/common.env'
       - './env/grafana-postgres.env'
-    environment: 
-      - 'PUID=${PUID}'
-      - 'PGID=${PGID}'
-      - 'TZ=${TZ}'

@@ -259,3 +259,14 @@ services:
       - '8428'
     volumes:
       - '${USERDIR}/volumes/victoria-metrics/data:/victoria-metrics-data:z'
+
+  grafana-postgres: 
+    image: postgres
+    container_name: grafana-postgres
+    restart: always
+    env_file: 
+      - './env/grafana-postgres.env'
+    environment: 
+      - 'PUID=${PUID}'
+      - 'PGID=${PGID}'
+      - 'TZ=${TZ}'

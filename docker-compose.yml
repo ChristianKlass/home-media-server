@@ -71,10 +71,6 @@ services:
     env_file: 
       - './env/common.env'
       - './env/grafana.env'
-    environment:
-      - 'GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana'
-      - 'GF_SERVER_SERVE_FROM_SUB_PATH=true'
-      - 'GF_SECURITY_ALLOW_EMBEDDING=true'
     expose:
       - '3000'
     volumes:

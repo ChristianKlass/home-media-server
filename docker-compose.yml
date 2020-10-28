@@ -137,7 +137,7 @@ services:
     entrypoint: ["exportarr"]
     command: ["radarr"]
     env_file: 
-      - './env/sonarr-exporter.env'
+      - './env/radarr-exporter.env'
     expose:
       - '9707'
 

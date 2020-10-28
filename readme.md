@@ -13,7 +13,11 @@ ROOT_URL=some.address # The address you'd like to access your server from.
 
 PUID=1000
 PGID=1001
-USERDIR=/path/to/keep/stuff # I use this to store the media/download/config stuff
+USERDIR=/path/to/keep/stuff             # I use this to store the media/download/config stuff
+
+POSTGRES_GRAFANA_PASSWORD=postgres      # you can change these to whatever you like
+POSTGRES_GRAFANA_USER=postgres-grafana  # i'm just putting these values here as an
+POSTGRES_GRAFANA_DB=postgres-grafana    # example. :D
 ```
 
 To get the PUID and PGID, you can run `id` in your terminal and it will give you some output like:

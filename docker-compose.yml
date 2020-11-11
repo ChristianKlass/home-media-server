@@ -164,6 +164,23 @@ services:
       - 'traefik.http.routers.muximux.rule=Host(`${ROOT_URL}`) && PathPrefix(`/`)'
       - 'traefik.http.services.muximux.loadbalancer.server.port=80'
 
+  bazarr:
+    image: ghcr.io/linuxserver/bazarr
+    container_name: bazarr
+    restart: always
+    env_file:
+      - './env/common.env'
+    ports:
+      - '6767:6767'
+    volumes:
+      - '${USERDIR}/volumes/config:/config'
+      - '${USERDIR}/media/tv-shows:/tv'
+      - '${USERDIR}/media/movies:/movies'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.bazarr.rule=Host(`${ROOT_URL}`) && PathPrefix(`/bazarr`)'
+      - 'traefik.http.services.bazarr.loadbalancer.server.port=6767'
+
   jellyfin:
     image: linuxserver/jellyfin
     container_name: jellyfin

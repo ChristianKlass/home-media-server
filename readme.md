@@ -26,6 +26,32 @@ uid=1000(mark) gid=1000(mark) groups=1000(mark),10(wheel),1001(docker)
 ```
 The important ones you're looking for are `uid` (PUID) and the `gid` for docker (PGID).
 
+### Docker and Docker-Compose
+You'll also need to install Docker and Docker-Compose. You can do so by following the [official instructions](https://docs.docker.com/engine/install/) from their website. 
+
+Basically, I'm using Fedora, I just need to do add the repository with the below commands.
+
+If you're using some other distro, follow the instructions they've provided on their instructions:
+```
+sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+```
+
+Then do the install with the package manager:
+```
+sudo dnf install docker-ce docker-ce-cli containerd.io
+```
+
+You can also use the [convenience script](https://docs.docker.com/engine/install/fedora/#install-using-the-convenience-script) they've provided, but I've personally never used it. 
+
+Remember to follow the [post installation steps](https://docs.docker.com/engine/install/linux-postinstall/). It makes life a lot easier.
+
+Installing [Docker Compose](https://docs.docker.com/compose/install/) is much easier. Just download the following file to the `/usr/local/bin/` folder and make it executable:
+```
+sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
 ## Traefik
 I'm going to be using Traefik as my "Ingress Controller". Everyone comes in through Traefik, and cannot access the various containers directly. I may decide to add some authentication in future (require authentication to access everything), maybe using Keycloak and OAuth.
 

@@ -87,7 +87,7 @@ loki:
     - './config/loki:/etc/loki:ro'
 ```
 
-So you can use this for any of the environment variables you need, so you don't have to put everything in one file, like `prometheus.yml`, `grafana.yml`, etc.
+So you can use this for any of the environment variables you need, so you don't have to put everything in one file, like `prometheus.env`, `grafana.env`, etc.
 
 ### Docker
 You'll also need to install Docker and Docker-Compose. You can do so by following the [official instructions](https://docs.docker.com/engine/install/) from their website. 

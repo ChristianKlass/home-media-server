@@ -283,4 +283,10 @@ We need a place to store the long term metrics that are collected by Prometheus,
 
 Apparently, Victoria Metrics is a drop in replacement for Prometheus' storage, which means that we can direct Prometheus to write to a Victoria Metrics instance, then in Grafana, just add the Victoria Metrics instance as a Prometheus datasource.
 
+To direct Prometheus to write to Victoria Metrics, we can use the `remote_write` feature in Prometheus. You can do this via the `prometheus.yml` file (you may have noticed this in the example provided above):
+```
+remote_write:
+ - url: "http://victoria-metrics:8428/api/v1/write"
+```
+
 Read more about it on their [Github](https://victoriametrics.github.io/) and their [official website](https://victoriametrics.com/).

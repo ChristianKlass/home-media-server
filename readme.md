@@ -41,6 +41,9 @@ services:
 So as you can see, it's as simple as adding a new volume (via the `volumes` key), and changing the service definition to use the new volume (via the `- 'loki-config:/etc/loki:ro'`).
 
 ## Before You Start
+Here are some prerequistes you need to install before you can use this Home Media Server.
+
+### Environment Variables
 You need to add the following to your environment variables. I don't know the best way to do it, but I use the `/etc/environment` file. If the file doesn't exist, create it:
 ```
 TZ=Asia/Singapore # Change this to your timezone in this format
@@ -61,7 +64,7 @@ uid=1000(mark) gid=1000(mark) groups=1000(mark),10(wheel),1001(docker)
 ```
 The important ones you're looking for are `uid` (PUID) and the `gid` for docker (PGID).
 
-### Docker and Docker-Compose
+### Docker
 You'll also need to install Docker and Docker-Compose. You can do so by following the [official instructions](https://docs.docker.com/engine/install/) from their website. 
 
 Basically, I'm using Fedora, I just need to do add the repository with the below commands.
@@ -80,7 +83,10 @@ You can also use the [convenience script](https://docs.docker.com/engine/install
 
 Remember to follow the [post installation steps](https://docs.docker.com/engine/install/linux-postinstall/). It makes life a lot easier.
 
-Installing [Docker Compose](https://docs.docker.com/compose/install/) is much easier. Just download the following file to the `/usr/local/bin/` folder and make it executable:
+### Docker Compose
+Installing [Docker Compose](https://docs.docker.com/compose/install/) is much easier. Obviously, you'll need to install Docker first, otherwise it won't do anything.
+
+Just download the following file to the `/usr/local/bin/` folder and make it executable:
 ```
 sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 

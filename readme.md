@@ -165,7 +165,7 @@ scrape_configs:
 Note: we're able to use the names of the services because we're using Docker. So instead of having to type something like `url: "http://192.168.56.101:8428/api/v1/write"` we can just use `http://victoria-metrics:8428/api/v1/write`. I think Docker has some sort of DNS or something that it uses internally.
 
 ### Grafana
-Grafana is.. a dashboarding platform for visualizing metrics. I just use it to check on the status of the server, basically. I use pre-built dashboards because I don't know how to make 'em, just yet.
+Grafana is a dashboarding platform for visualizing metrics. I just use it to check on the status of the server, basically. I use pre-built dashboards because I don't know how to make 'em, just yet.
 
 The dashboards I'm using are:
   * [Traefik 2 Dashboard](https://grafana.com/grafana/dashboards/11462) - 11462
@@ -173,11 +173,11 @@ The dashboards I'm using are:
 
 > In case you're wondering, the number at the back is the ID of the Dashboard's ID. You can just use this number to import the dashboard in Grafana's GUI.
 
-If we're going to serve Grafana on a subpath using Traefik, we need to add the following environment variables into the `docker-compose.yml` file:
+If we're going to serve Grafana on a subpath using Traefik, we need to add the following environment variables into the `./env/grafana.env` file:
 ```
-environment:
-  - 'GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana'
-  - 'GF_SERVER_SERVE_FROM_SUB_PATH=true'
+GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/grafana
+GF_SERVER_SERVE_FROM_SUB_PATH=true
+GF_SECURITY_ALLOW_EMBEDDING=true # this is needed to use Grafana with Muximux.
 ```
 
 If you need to install plugins for Grafana, you can place the folder in the following location:

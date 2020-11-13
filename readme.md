@@ -3,6 +3,15 @@ This is a home media server project for me to learn how Docker and Docker-Compos
 
 I intend to make it able to automatically download Movies and TV series using softwares such as Sonarr and Radarr. Of course, I'm not actually going to use it, because we all know downloading movies is illegal. But I think it's still an interesting project and I hope I learn a lot from it.
 
+## How To Use
+1. Make sure you've installed the prerequisites (From the Before You Start section):
+    - Installed Docker and Docker-Compose
+    - Set the environment variables
+2. In the same directory as the `docker-compose.yml`, run the command:
+```
+docker-compose up -d
+```
+
 ## Using Docker Volumes
 **Note:** I know that I don't use the Docker volumes in this build, and you totally can if you want. I just want it to be easy to move my stuff around if/when I need to. In my experience, Docker volumes are clunky to move around. I can't just copy a volume from one computer to another easily. If this is possible, please let me know, it would be nice.
 

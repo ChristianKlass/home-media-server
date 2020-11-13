@@ -53,9 +53,6 @@ PUID=1000
 PGID=1001
 USERDIR=/path/to/keep/stuff             # I use this to store the media/download/config stuff
 
-POSTGRES_GRAFANA_PASSWORD=postgres      # you can change these to whatever you like
-POSTGRES_GRAFANA_USER=postgres-grafana  # i'm just putting these values here as an
-POSTGRES_GRAFANA_DB=postgres-grafana    # example. :D
 ```
 
 To get the PUID and PGID, you can run `id` in your terminal and it will give you some output like:
@@ -63,6 +60,34 @@ To get the PUID and PGID, you can run `id` in your terminal and it will give you
 uid=1000(mark) gid=1000(mark) groups=1000(mark),10(wheel),1001(docker)
 ```
 The important ones you're looking for are `uid` (PUID) and the `gid` for docker (PGID).
+
+Also, I've stopped using the environment variables directly in the `docker-compose.yml` file. I'm using `.env` files now. I just think it's neater. For example, I have a `common.env` file which I want all the services to use:
+```
+# common.env
+PUID=${PUID}
+PGID=${PGID}
+TZ=${TZ}
+```
+
+Then I use it in the `docker-compose.yml` with the `env_file` key like so (let's use Loki as an example again because it's short):
+```
+# docker-compose.yml
+loki:
+  image: grafana/loki:latest
+  container_name: loki
+  hostname: loki
+  restart: always
+  command:
+    - '--config.file=/etc/loki/local-config.yml'
+  env_file: 
+    - './env/common.env'
+  expose:
+    - '3100'
+  volumes:
+    - './config/loki:/etc/loki:ro'
+```
+
+So you can use this for any of the environment variables you need, so you don't have to put everything in one file, like `prometheus.yml`, `grafana.yml`, etc.
 
 ### Docker
 You'll also need to install Docker and Docker-Compose. You can do so by following the [official instructions](https://docs.docker.com/engine/install/) from their website. 
@@ -160,8 +185,6 @@ If you need to install plugins for Grafana, you can place the folder in the foll
 volumes:
   - './config/grafana/plugins:/var/lib/grafana/plugins:rw'
 ```
-> TODO: Eventually, I want to set up a MYSQL database so that Grafana can use it. But not so soon, I guess :P
-
 
 ## Media server
 **Note:** For most of these apps, you'll need to first expose their port using the `docker-compose.yml` so that you can access the web UI. You can do this with the `ports` key:
@@ -290,3 +313,16 @@ remote_write:
 ```
 
 Read more about it on their [Github](https://victoriametrics.github.io/) and their [official website](https://victoriametrics.com/).
+
+### Postgres
+I've converted Grafana to use Postgres as its database rather than just using the built in one. This is not really useful now, but I think if there's many instances of Grafana, they can use a shared database so that their data (users, dashboards[I think?], and settings[I think also?]) are consistent between the various instances.
+
+I've added the following env variables to use with Grafana:
+```
+GF_DATABASE_TYPE=postgres
+GF_DATABASE_HOST=grafana-postgres:5432
+GF_DATABASE_USER=postgres-grafana
+GF_DATABASE_NAME=postgres-grafana
+GF_DATABASE_PASSWORD=postgres      # these are just placeholders, make sure you change it. don't use the default password.
+GF_DATABASE_SSL_MODE=disable
+```

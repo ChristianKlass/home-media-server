@@ -3,7 +3,33 @@ This is a home media server project for me to learn how Docker and Docker-Compos
 
 I intend to make it able to automatically download Movies and TV series using softwares such as Sonarr and Radarr. Of course, I'm not actually going to use it, because we all know downloading movies is illegal. But I think it's still an interesting project and I hope I learn a lot from it.
 
+## Using Docker Volumes
 **Note:** I know that I don't use the Docker volumes in this build, and you totally can if you want. I just want it to be easy to move my stuff around if/when I need to. In my experience, Docker volumes are clunky to move around. I can't just copy a volume from one computer to another easily. If this is possible, please let me know, it would be nice.
+
+To use Docker volumes, change the `docker-compose.yml` file to the following. I'll just use Loki as an example (because it's small), do the same for the rest of the services:
+```
+version: '3.6'
+
+volumes:
+  loki-config: {}
+
+services:
+  loki:
+  image: grafana/loki:latest
+  container_name: loki
+  hostname: loki
+  restart: always
+  command:
+    - '--config.file=/etc/loki/local-config.yml'
+  env_file: 
+    - './env/common.env'
+  expose:
+    - '3100'
+  volumes:
+    - 'loki-config:/etc/loki:ro'
+```
+
+So as you can see, it's as simple as adding a new volume (via the `volumes` key), and changing the service definition to use the new volume (via the `- 'loki-config:/etc/loki:ro'`).
 
 ## Before You Start
 You need to add the following to your environment variables. I don't know the best way to do it, but I use the `/etc/environment` file. If the file doesn't exist, create it:

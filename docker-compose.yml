@@ -7,6 +7,7 @@ services:
   traefik:
     image: 'traefik:latest'
     container_name: traefik
+    restart: always
     env_file: 
       - './env/common.env'
     command:
@@ -153,6 +154,7 @@ services:
   muximux:
     image: linuxserver/muximux
     container_name: muximux
+    restart: always
     env_file: 
       - './env/common.env'
     expose:
@@ -184,6 +186,7 @@ services:
   jellyfin:
     image: linuxserver/jellyfin
     container_name: jellyfin
+    restart: always
     env_file: 
       - './env/common.env'
     expose:

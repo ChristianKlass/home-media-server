@@ -29,19 +29,6 @@ services:
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
-  # watchtower:
-  #   image: containrrr/watchtower
-  #   container_name: watchtower
-  #   restart: always
-  #   env_file:
-  #     - './env/common.env'
-  #   environment:
-  #     - 'WATCHTOWER_SCHEDULE=0 0 4 * * *'
-  #   command:
-  #     - '--rolling-restart=true'
-  #   volumes:
-  #     - '/var/run/docker.sock:/var/run/docker.sock'
-
   ################################################################
   #                     Monitoring                               #
   ################################################################
@@ -115,28 +102,6 @@ services:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
-
-  sonarr_exporter:
-    image: onedr0p/exportarr:master
-    container_name: sonarr_exporter
-    restart: always
-    entrypoint: ["exportarr"]
-    command: ["sonarr"]
-    env_file:
-      - './env/sonarr-exporter.env'
-    expose:
-      - '9707'
-
-  radarr_exporter:
-    image: onedr0p/exportarr:master
-    container_name: radarr_exporter
-    restart: always
-    entrypoint: ["exportarr"]
-    command: ["radarr"]
-    env_file:
-      - './env/radarr-exporter.env'
-    expose:
-      - '9707'
 
   vector:
     image: timberio/vector:latest-alpine

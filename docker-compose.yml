@@ -117,11 +117,16 @@ services:
     image: portainer/portainer-ce
     container_name: portainer
     restart: always
+    command: -H unix:///var/run/docker.sock
     ports:
       - '9000:9000'
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
       - '${USERDIR}/volumes/portainer/data:/data'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.portainer.rule=Host(`${ROOT_URL}`) && PathPrefix(`/portainer`)'
+      - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
 
   ################################################################
   #                     Media Server                             #

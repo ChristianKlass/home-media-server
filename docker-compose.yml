@@ -41,7 +41,7 @@ services:
       - './env/common.env'
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--web.external-url=http://${ROOT_URL}/prometheus'
+      # - '--web.external-url=http://${ROOT_URL}/prometheus'
     expose:
       - '9090'
     volumes:
@@ -131,23 +131,6 @@ services:
       - 'traefik.http.routers.muximux.rule=Host(`${ROOT_URL}`) && PathPrefix(`/`)'
       - 'traefik.http.services.muximux.loadbalancer.server.port=80'
 
-  # bazarr:
-  #   image: ghcr.io/linuxserver/bazarr
-  #   container_name: bazarr
-  #   restart: always
-  #   env_file:
-  #     - './env/common.env'
-  #   ports:
-  #     - '6767:6767'
-  #   volumes:
-  #     - '${USERDIR}/volumes/config:/config'
-  #     - '${USERDIR}/media/tv-shows:/tv'
-  #     - '${USERDIR}/media/movies:/movies'
-  #   labels:
-  #     - 'traefik.enable=true'
-  #     - 'traefik.http.routers.bazarr.rule=Host(`${ROOT_URL}`) && PathPrefix(`/bazarr`)'
-  #     - 'traefik.http.services.bazarr.loadbalancer.server.port=6767'
-
   jellyfin:
     image: linuxserver/jellyfin
     container_name: jellyfin
@@ -225,7 +208,6 @@ services:
       - 'traefik.http.services.sonarr.loadbalancer.server.port=8989'
 
   qbittorrent:
-#   image: 'linuxserver/qbittorrent:version-14.2.5.99202004250119-7015-2c65b79ubuntu18.04.1'
     image: 'linuxserver/qbittorrent:latest'
     container_name: qbit
     restart: always
@@ -251,6 +233,38 @@ services:
       - 'traefik.http.services.qbittorrent.loadbalancer.passhostheader=false'
 
   ################################################################
+  #                       Utilities                              #
+  ################################################################
+  firefly:
+    image: jc5x/firefly-iii:latest
+    container_name: firefly
+    volumes:
+      - /home/mark/volumes/firefly/upload:/var/www/html/storage/upload
+    env_file: './env/firefly.env'
+    ports:
+      - 9876:8080
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.firefly.rule=Host(`${ROOT_URL}`) && PathPrefix(`/firefly`)'
+      - 'traefik.http.services.firefly.loadbalancer.server.port=8080'
+    depends_on:
+      # using postgres, remember to set the appropriate settings in the .env file
+      - postgres
+
+  # firefly-db:
+  #   image: yobasystems/alpine-mariadb:latest
+  #   container_name: firefly-db
+  #   env_file: 
+  #     - './env/firefly-mysql.env'
+  #   volumes:
+  #     - /home/mark/volumes/firefly/db:/var/lib/mysql
+
+  cron:
+    container_name: cron-test
+    image: alpine
+    command: sh -c "echo \"0 3 * * * wget https://firefly/cron/run/${FIREFLY_API_KEY}\" | crontab - && crond -f -L /dev/stdout"
+
+  ################################################################
   #                       Storage                                #
   ################################################################
   victoria-metrics:
@@ -264,10 +278,14 @@ services:
     volumes:
       - '${USERDIR}/volumes/victoria-metrics/data:/victoria-metrics-data:z'
 
-  grafana-postgres:
+  postgres:
     image: postgres
-    container_name: grafana-postgres
+    container_name: postgres
     restart: always
+    ports: 
+      - '5432:5432'
     env_file:
       - './env/common.env'
-      - './env/grafana-postgres.env'
+      - './env/postgres.env'
+
+

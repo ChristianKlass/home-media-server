@@ -113,6 +113,16 @@ services:
       - './config/vector:/etc/vector:ro'
       - '/var/run/docker.sock:/var/run/docker.sock' # so that it can collect logs of the containers.
 
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    restart: always
+    ports:
+      - '9000:9000'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '${USERDIR}/volumes/portainer/data:/data'
+
   ################################################################
   #                     Media Server                             #
   ################################################################
@@ -262,7 +272,7 @@ services:
   cron:
     container_name: cron-test
     image: alpine
-    command: sh -c "echo \"0 3 * * * wget https://firefly/cron/run/${FIREFLY_API_KEY}\" | crontab - && crond -f -L /dev/stdout"
+    command: sh -c "echo \"0 3 * * * wget https://firefly/cron/run/${FIREFLY_APP_KEY}\" | crontab - && crond -f -L /dev/stdout"
 
   ################################################################
   #                       Storage                                #

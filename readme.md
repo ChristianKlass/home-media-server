@@ -325,4 +325,6 @@ GF_DATABASE_USER=postgres-grafana
 GF_DATABASE_NAME=postgres-grafana
 GF_DATABASE_PASSWORD=postgres      # these are just placeholders, make sure you change it. don't use the default password.
 GF_DATABASE_SSL_MODE=disable
-```
+
+## TODO
+Seperate the docker-compose.yml functionally maybe? databases, monitoring, applications, etc. The compose file is getting super long and irritating now.
